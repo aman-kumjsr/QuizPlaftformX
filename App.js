@@ -38,6 +38,8 @@ const App = () => {
     });
   };
 
+  const borderAimation = new useRef(new Animated.Value(0)).current;
+
   const Optdata = ["Taj Mahal", "Qutub Minar", "Jantar Mantar"];
 
   return (
@@ -63,16 +65,28 @@ const App = () => {
                     <Text style={{ fontSize: 15, color: "#fff", padding: 5 }}>
                       {item}
                     </Text>
+
                     <Animated.View
                       style={{
-                        width: fillAnimation.interpolate({
-                          inputRange: [0, 100],
-                          outputRange: ["0%", "100%"],
-                        }),
-                        height: 40,
-                        backgroundColor: "green",
+                        width: "100%",
+                        height: 42,
+                        borderWidth: 1,
+                        borderColor: "#fff",
                       }}
-                    />
+                    >
+                      <Animated.View
+                        style={{
+                          width: fillAnimation.interpolate({
+                            inputRange: [0, 100],
+                            outputRange: ["0%", "100%"],
+                          }),
+                          height: 40,
+                          backgroundColor: "green",
+                          borderWidth: 1,
+                          borderColor: "#fff",
+                        }}
+                      />
+                    </Animated.View>
                   </View>
                 ))}
               </View>
