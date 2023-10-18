@@ -72,7 +72,7 @@ const Submit = ({ navigation }) => {
             </View>
           )}
 
-          <View style={{ marginBottom: 5, flex: 0.15 }}>
+          <View style={{ marginBottom: 30, flex: 0.15 }}>
             {showContent ? (
               //Display the new content here
               <View>
@@ -88,6 +88,7 @@ const Submit = ({ navigation }) => {
                         height: 42,
                         borderWidth: 1,
                         borderColor: "#fff",
+                        position: "relative",
                       }}
                     >
                       <Animated.View
@@ -100,13 +101,30 @@ const Submit = ({ navigation }) => {
                           backgroundColor: "green",
                         }}
                       />
+                      <View
+                        style={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            marginLeft: 22,
+                            color: "#fff",
+                            fontSize: 15,
+                          }}
+                        >
+                          100%
+                        </Text>
+                      </View>
                     </Animated.View>
                   </View>
                 ))}
                 <View>
                   {result == "won" ? (
                     <View>
-                      <Text style={styles.Congrats}>Yay!!</Text>
+                      <Text style={styles.Congrats}>Yay !!</Text>
                       <Text style={styles.Congrats}>You are correct!</Text>
                     </View>
                   ) : (
@@ -115,10 +133,10 @@ const Submit = ({ navigation }) => {
                 </View>
                 <Text style={{ textAlign: "center" }}>
                   <Text style={{ color: "#fff", fontSize: 24 }}>
-                    You Scored
+                    You Scored{" "}
                   </Text>
                   <Text style={{ color: "#4B9EF9", fontSize: 24 }}>
-                    80 Points!!
+                    80 Points
                   </Text>
                 </Text>
               </View>
@@ -129,6 +147,7 @@ const Submit = ({ navigation }) => {
                     backgroundColor: "#5F1EBE",
                     padding: 15,
                     textAlign: "center",
+                    borderRadius: 5,
                   }}
                 >
                   Submit
@@ -162,6 +181,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#fff",
     textAlign: "center",
+    marginBottom: 5,
   },
 });
 
