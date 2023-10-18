@@ -19,26 +19,33 @@ const image = {
 const Submit = ({ navigation, percentages }) => {
   const [result, setResult] = useState(null);
   const [showContent, setShowContent] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [selectedOption, setSelectedOptoin] = useState(null);
-  const fillAnimation = useRef(new Animated.Value(0)).current;
 
   const correctOptionIndex = 0;
 
-  const vote1 = 60;
-  const vote2 = 30;
-  const vote3 = 10;
+  const vote1 = 54;
+  const vote2 = 22;
+  const vote3 = 15;
   const totalVote = vote1 + vote2 + vote3;
 
   const calcOptionVote = () => {
     const percentVote1 = (vote1 / totalVote) * 100;
     const percentVote2 = (vote2 / totalVote) * 100;
     const percentVote3 = (vote3 / totalVote) * 100;
-    // console.log(percentVote1);
+
     return { percentVote1, percentVote2, percentVote3 };
   };
 
   percentages = calcOptionVote(vote1, vote2, vote3);
+  const percentageValues = Object.values(percentages);
+
+  const fillAnimations = percentageValues.map(
+    () => useRef(new Animated.Value(0)).current
+  );
+  for (let i = 0; i < percentageValues.length; i++) {
+    fillAnimations.push(useRef(new Animated.Value(0)).current);
+  }
 
   handleOptionSelect = (selectedIndex) => {
     setSelectedOptoin(selectedIndex);
@@ -46,7 +53,6 @@ const Submit = ({ navigation, percentages }) => {
 
   const handleClick = () => {
     setShowContent(!showContent); // Used not operator to set showContent value true
-    setIsSubmitting(true);
 
     if (selectedOption === correctOptionIndex) {
       setResult("won");
@@ -55,16 +61,19 @@ const Submit = ({ navigation, percentages }) => {
     }
 
     // Configure the fill animation
-    Animated.timing(fillAnimation, {
-      toValue: 100,
-      duration: 2000, // Adjust the duration as needed
-      easing: Easing.linear,
-      useNativeDriver: false,
-    }).start(() => {
-      // Reset animation and state after completion
-      // fillAnimation.setValue(0);
-      setIsSubmitting(false);
-    });
+
+    for (let i = 0; i < percentageValues.length; i++) {
+      const percentage = percentageValues[i];
+      Animated.timing(fillAnimations[i], {
+        toValue: percentage,
+        duration: 2000, // Adjust the duration as needed
+        easing: Easing.linear,
+        useNativeDriver: false,
+      }).start(() => {
+        // Reset animation and state after completion
+        // fillAnimation.setValue(0);
+      });
+    }
   };
 
   const borderAimation = new useRef(new Animated.Value(0)).current;
@@ -75,7 +84,6 @@ const Submit = ({ navigation, percentages }) => {
     <View style={styles.container}>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <View style={styles.imageShadow}>
-          {/* <Text style={styles.text}>Inside</Text> */}
           <View style={{ flex: 0.5 }}>
             <QuizComponent navigation={navigation} />
           </View>
@@ -92,10 +100,10 @@ const Submit = ({ navigation, percentages }) => {
             {showContent ? (
               //Display the new content here
               <View>
-                {Optdata.map((item, index) => (
+                {Object.keys(percentages).map((key, index) => (
                   <View key={index} style={styles.opt}>
                     <Text style={{ fontSize: 15, color: "#fff", padding: 5 }}>
-                      {item}
+                      {Optdata[index]}
                     </Text>
 
                     <Animated.View
@@ -109,7 +117,7 @@ const Submit = ({ navigation, percentages }) => {
                     >
                       <Animated.View
                         style={{
-                          width: fillAnimation.interpolate({
+                          width: fillAnimations[index].interpolate({
                             inputRange: [0, 100],
                             outputRange: ["0%", "100%"],
                           }),
@@ -132,10 +140,13 @@ const Submit = ({ navigation, percentages }) => {
                           }}
                         >
                           {index === 0
-                            ? `${percentages.percentVote1}%`
-                            : index === 1
-                            ? `${percentages.percentVote2}%`
-                            : `${percentages.percentVote3}%`}
+                            ? `${Math.ceil(percentages.percentVote1)}%` // Object percentages is used to
+                              ? `${parseInt(percentages.percentVote2)}%` //  display the percent
+                              : index === 1
+                            : `${parseInt(percentages.percentVote3)}%`}
+                          {/* {`${parseInt(
+                            percentages[`percentVote${index + 1}`]
+                          )}%`} */}
                         </Text>
                       </View>
                     </Animated.View>
