@@ -16,7 +16,7 @@ const image = {
   uri: "https://cdn.britannica.com/86/170586-050-AB7FEFAE/Taj-Mahal-Agra-India.jpg",
 };
 
-const Submit = ({ navigation }) => {
+const Submit = ({ navigation, percentages }) => {
   const [result, setResult] = useState(null);
   const [showContent, setShowContent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,6 +25,21 @@ const Submit = ({ navigation }) => {
 
   const correctOptionIndex = 0;
 
+  const vote1 = 60;
+  const vote2 = 30;
+  const vote3 = 10;
+  const totalVote = vote1 + vote2 + vote3;
+
+  const calcOptionVote = () => {
+    const percentVote1 = (vote1 / totalVote) * 100;
+    const percentVote2 = (vote2 / totalVote) * 100;
+    const percentVote3 = (vote3 / totalVote) * 100;
+    // console.log(percentVote1);
+    return { percentVote1, percentVote2, percentVote3 };
+  };
+
+  percentages = calcOptionVote(vote1, vote2, vote3);
+
   handleOptionSelect = (selectedIndex) => {
     setSelectedOptoin(selectedIndex);
   };
@@ -32,6 +47,7 @@ const Submit = ({ navigation }) => {
   const handleClick = () => {
     setShowContent(!showContent); // Used not operator to set showContent value true
     setIsSubmitting(true);
+
     if (selectedOption === correctOptionIndex) {
       setResult("won");
     } else {
@@ -115,7 +131,11 @@ const Submit = ({ navigation }) => {
                             fontSize: 15,
                           }}
                         >
-                          100%
+                          {index === 0
+                            ? `${percentages.percentVote1}%`
+                            : index === 1
+                            ? `${percentages.percentVote2}%`
+                            : `${percentages.percentVote3}%`}
                         </Text>
                       </View>
                     </Animated.View>
