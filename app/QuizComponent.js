@@ -2,15 +2,9 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import QuizStart from "./QuizStart";
 
-// const image = {
-//   uri: 'https://cdn.britannica.com/86/170586-050-AB7FEFAE/Taj-Mahal-Agra-India.jpg',
-// };
-
 const QuizComponent = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      {/* <ImageBackground source={image} style={styles.image}>
-        <View style={styles.imageShadow}> */}
       <View style={styles.cancelContainer}>
         <TouchableOpacity onPress={() => navigation.navigate("QuizStart")}>
           <Text style={styles.cancel}>&times;</Text>

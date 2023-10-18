@@ -8,8 +8,6 @@ import {
   Animated,
   Easing,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import QuizComponent from "./QuizComponent";
 import Options from "./Options";
@@ -19,14 +17,26 @@ const image = {
 };
 
 const Submit = ({ navigation }) => {
-  const [result, setResult] = useState(false);
+  const [result, setResult] = useState(null);
   const [showContent, setShowContent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedOption, setSelectedOptoin] = useState(null);
   const fillAnimation = useRef(new Animated.Value(0)).current;
 
+  const correctOptionIndex = 0;
+
+  handleOptionSelect = (selectedIndex) => {
+    setSelectedOptoin(selectedIndex);
+  };
+
   const handleClick = () => {
-    setShowContent(!showContent);
+    setShowContent(!showContent); // Used not operator to set showContent value true
     setIsSubmitting(true);
+    if (selectedOption === correctOptionIndex) {
+      setResult("won");
+    } else {
+      setResult("lost");
+    }
 
     // Configure the fill animation
     Animated.timing(fillAnimation, {
@@ -55,7 +65,10 @@ const Submit = ({ navigation }) => {
           </View>
           {showContent || (
             <View style={{ flex: 0.45 }}>
-              <Options />
+              <Options
+                correctOptionIndex={correctOptionIndex}
+                onOptionSelect={handleOptionSelect}
+              />
             </View>
           )}
 
@@ -91,13 +104,19 @@ const Submit = ({ navigation }) => {
                   </View>
                 ))}
                 <View>
-                  <Text style={styles.Congrats}>Yay!!</Text>
-                  <Text style={styles.Congrats}>You are correct!</Text>
+                  {result == "won" ? (
+                    <View>
+                      <Text style={styles.Congrats}>Yay!!</Text>
+                      <Text style={styles.Congrats}>You are correct!</Text>
+                    </View>
+                  ) : (
+                    <Text style={styles.Congrats}>Try Again</Text>
+                  )}
                 </View>
                 <Text style={{ textAlign: "center" }}>
                   <Text style={{ color: "#fff", fontSize: 24 }}>
                     You Scored
-                  </Text>{" "}
+                  </Text>
                   <Text style={{ color: "#4B9EF9", fontSize: 24 }}>
                     80 Points!!
                   </Text>

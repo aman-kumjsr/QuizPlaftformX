@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, FlatList, Text, TouchableOpacity, Animated } from "react-native";
 
-const Options = ({ selectedIndices }) => {
+const Options = ({ onOptionSelect }) => {
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
 
   // Sample data for the FlatList
@@ -16,21 +16,17 @@ const Options = ({ selectedIndices }) => {
     // Add more items here
   ];
 
+  const handleOptionSelection = (index) => {
+    setSelectedItemIndex(index);
+    onOptionSelect(index);
+  };
+
   const renderItem = ({ item, index }) => {
     const isSelected = index === selectedItemIndex;
-    // const isSelectedAnimated = selectedIndices.includes(index);
-
-    // if (result) {
-    //   return (
-    //     <View>
-    //       <Text>{item.text}</Text>
-    //     </View>
-    //   );
-    // }
 
     return (
       <TouchableOpacity
-        onPress={() => setSelectedItemIndex(index)}
+        onPress={() => handleOptionSelection(index)}
         style={{
           backgroundColor: isSelected ? "white" : "rgba(0,0,0,0.6)", // Change the background color conditionally
 
